@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.booking.mapper.BookingMapper">
+    <select id="create" resultType="com.example.booking.model.response.BookingInfoResponse"
+            parameterType="com.example.booking.model.request.BookingInfoRequest">
+        INSERT INTO booking_info (
+            "name",
+            phone,
+            priority,
+            "product_type",
+            "date",
+            "time",
+            status,
+            employee_id,
+            create_date
+        )VALUES(
+            #{name},
+            #{phone},
+            #{priority},
+            #{productType},
+            #{date},
+            #{time},
+            #{status},
+            #{employeeId},
+            NOW()
+        ) RETURNING *;
+    </select>
+
+    <select id="get" resultType="com.example.booking.model.response.BookingInfoResponse"
+            parameterType="com.example.booking.model.request.BookingInfoRequest">
+        select *, employee.name as employeeName
+        from booking_info
+        left join employee on booking_info.employee_id = employee.id
+        <where>
+            <if test="name !=null and name !=''">
+                and booking_info.name ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="productType !=null and productType !=''">
+                and booking_info.product_type ILIKE CONCAT('%' || #{productType} || '%')
+            </if>
+            <if test="date !=null and date !=''">
+                and booking_info.date = #{date}
+            </if>
+            <if test="employeeId !=null and employeeId !=''">
+                and booking_info.employee_id = #{employeeId}::uuid
+            </if>
+        </where>
+
+        order by booking_info.create_date desc
+
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
+    </select>
+
+    <select id="getByEmployee" resultType="com.example.booking.model.response.BookingInfoResponse"
+            parameterType="com.example.booking.model.request.BookingInfoRequest">
+        select * from booking_info
+        <where>
+            <if test="date !=null and date !=''">
+                and "date" = #{date}
+            </if>
+            <if test="employeeId !=null and employeeId !=''">
+                and employee_id = #{employeeId}::uuid
+            </if>
+        </where>
+    </select>
+
+    <select id="countBooking" parameterType="com.example.booking.model.request.BookingInfoRequest"
+            resultType="integer">
+        select count(*) from booking_info
+        <where>
+            <if test="name !=null and name !=''">
+                and "name" ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="productType !=null and productType !=''">
+                and "product_type" ILIKE CONCAT('%' || #{productType} || '%')
+            </if>
+            <if test="date !=null and date !=''">
+                and "date" = #{date}
+            </if>
+            <if test="employeeId !=null and employeeId !=''">
+                and employee_id = #{employeeId}::uuid
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+        </where>
+    </select>
+
+    <select id="checkPriority" parameterType="com.example.booking.model.request.BookingInfoRequest"
+            resultType="integer">
+        select count(*) from booking_info
+        where phone = #{phone}
+    </select>
+
+    <update id="update" parameterType="com.example.booking.model.request.BookingInfoRequest">
+        UPDATE booking_info
+        SET
+            "name" = #{name},
+            phone = #{phone},
+            "product_type" = #{productType},
+            "date" = #{date},
+            status = #{status},
+            comment = #{comment},
+            attitude = #{attitude},
+            employee_id = #{employeeId}
+        WHERE id = #{id}::uuid
+    </update>
+
+    <delete id="delete" parameterType="com.example.booking.model.request.BookingInfoRequest">
+        DELETE FROM booking_info
+        WHERE id = #{id}::uuid
+    </delete>
+
+    <select id="statistic"
+        resultType="com.example.booking.model.response.EmployeeResponse">
+        select employee.*, count(*) as sumService
+        from booking_info
+        left join employee on booking_info.employee_id = employee.id
+        <where>
+            <if test="date != null and date != ''">
+                and booking_info.date = #{date}
+            </if>
+            <if test="month != null and month != ''">
+                and TO_CHAR(booking_info.date, 'yyyy-mm') = #{month}
+            </if>
+            <if test="year != null and year != ''">
+                and TO_CHAR(booking_info.date, 'yyyy') = #{year}
+            </if>
+            and booking_info.status = 2
+            and employee.id = #{id}::uuid
+        </where>
+        group by employee.id;
+    </select>
+</mapper>

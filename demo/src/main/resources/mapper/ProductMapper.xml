@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.booking.mapper.ProductMapper">
+    <select id="get" parameterType="com.example.booking.model.request.ProductRequest"
+        resultType="com.example.booking.model.response.ProductResponse">
+        select * from product
+        <where>
+            <if test="code != null and code != ''">
+                and code = #{code}
+            </if>
+            <if test="name != null and name != ''">
+                and "name" ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="create" resultType="com.example.booking.model.request.ProductRequest">
+        INSERT INTO product(
+            "name",
+            code,
+            create_date
+        )VALUES(
+            #{name},
+            #{code},
+            NOW()
+        )
+        RETURNING *;
+    </select>
+
+    <update id="update" parameterType="com.example.booking.model.request.ProductRequest">
+        UPDATE product
+        SET(
+            "name" = #{name},
+            code = #{code},
+        )
+        where id = #{id}::uuid
+    </update>
+
+    <delete id="delete" parameterType="com.example.booking.model.request.ProductRequest">
+        DELETE FROM product
+        where id = #{id}::uuid
+    </delete>
+</mapper>

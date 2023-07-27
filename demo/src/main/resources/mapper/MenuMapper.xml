@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.booking.mapper.MenuMapper">
+
+	<insert id="create" parameterType="com.example.booking.model.request.MenuRequest">
+		INSERT INTO portal_menu (
+			name,
+			name_en,
+			parent_id,
+			priority,
+			path,
+			status,
+			icon,
+	   		create_date,
+	   		creater
+   		)
+		VALUES (
+			#{name},
+			#{nameEn},
+			#{parentId},
+			#{priority},
+			#{path},
+			#{status},
+			#{icon},
+			NOW(),
+			#{creater}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.example.booking.model.request.MenuRequest">
+		UPDATE portal_menu
+		SET name=#{name},
+			name_en=#{nameEn},
+			parent_id=#{parentId},
+			priority = #{priority},
+			status = #{status},
+			icon = #{icon},
+			edit_date = NOW(),
+			editer = #{editer}
+		WHERE id = #{id}::uuid
+	</update>
+	
+	<select id="get" resultType="com.example.booking.model.response.MenuResponse">
+		SELECT * FROM level_menu
+		<where>
+			<if test="name != null and name != '' ">
+		    	AND name ILIKE CONCAT('%' || #{name} ||'%')
+	        </if>
+	        <if test="roleCode != null and roleCode != ''">
+	          	AND role_code = #{roleCode}
+	        </if>        
+		</where>
+	</select>
+
+	<select id="getAll" resultType="com.example.booking.model.response.MenuResponse">
+		SELECT * FROM menu
+	</select>
+	
+	<select id="findAllMenu" resultType="com.example.booking.model.response.MenuResponse">
+		SELECT * FROM menu ORDER BY create_date  DESC
+	</select>
+	
+	<select id="findAllMenuChild" resultType="com.example.booking.model.response.MenuResponse">
+		SELECT * FROM portal_menu WHERE parent_id IS NOT NULL AND status = 'Y' ORDER BY create_date  DESC
+	</select>
+	
+	<select id="findParentMenu" resultType="com.example.booking.model.response.MenuResponse">
+		SELECT * FROM portal_menu WHERE parent_id IS NULL AND status = 'Y' AND id IN (
+			SELECT menu_id::uuid from portal_permission WHERE 
+			role_code IN
+			<foreach collection="listRoles" item="role" separator="," open="(" close=")">
+				#{role}
+			</foreach>
+			AND VIEW = 1
+		)
+		ORDER BY priority
+	</select>
+	
+	<select id="fetchRoleByUserId" resultType="java.lang.String">
+		select role_code from portal_user_role WHERE user_id = #{userId};
+	</select>
+	
+	<select id="findMenuByParentId" resultType="com.example.booking.model.response.MenuResponse">
+		SELECT * FROM portal_menu WHERE parent_id = #{parentId} AND status = 'Y' 
+		AND id IN (
+			SELECT menu_id::uuid from portal_permission WHERE 
+			role_code IN
+			<foreach collection="listRoles" item="role" separator="," open="(" close=")">
+				#{role}
+			</foreach>
+			AND VIEW = 1
+		)
+		ORDER BY priority
+	</select>
+	
+	<select id="countByCondition" resultType="Integer">
+		SELECT COUNT(*) FROM portal_menu
+		  <where>
+	          <if test="name != null and name != '' ">
+		    	AND name ILIKE CONCAT('%' || #{name} ||'%')
+	        </if> 
+	        <if test="parentId != null and parentId != '' ">
+	        	AND parent_id=#{parentId}
+	        </if> 
+	        <if test="status != null and status != ''">
+	          	AND status = #{status}
+	        </if>          
+		</where>
+		 
+	</select>
+
+</mapper>

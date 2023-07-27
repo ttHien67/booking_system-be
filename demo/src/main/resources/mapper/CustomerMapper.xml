@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.booking.mapper.CustomerMapper">
+    <select id="create" resultType="com.example.booking.model.response.CustomerResponse"
+            parameterType="com.example.booking.model.request.BookingInfoRequest">
+        INSERT INTO customer (
+            code,
+            "name",
+            "age",
+            phone,
+            email,
+            "address",
+            create_date
+        )VALUES(
+            #{code},
+            #{name},
+            #{age},
+            #{phone},
+            #{email},
+            #{address},
+            NOW()
+        )
+         RETURNING *;
+    </select>
+
+    <update id="updateVip" parameterType="string">
+        UPDATE customer
+        SET
+            vip = 1
+        WHERE code = #{code}
+    </update>
+
+    <select id="get" resultType="com.example.booking.model.response.CustomerResponse"
+            parameterType="com.example.booking.model.request.CustomerRequest">
+        select * from customer
+        <where>
+            <if test="code !=null and code !=''">
+                code = #{code}
+            </if>
+            <if test="name !=null and name !=''">
+                and "name" ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="address !=null and address !=''">
+                and address ILIKE CONCAT('%' || #{address} || '%')
+            </if>
+            <if test="phone !=null and phone !=''">
+                and phone = #{phone}
+            </if>
+            <if test="vip !=null and vip !=''">
+                and vip = #{vip}
+            </if>
+        </where>
+
+        order by create_date desc
+
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
+    </select>
+
+    <select id="getByCode" parameterType="string" resultType="com.example.booking.model.response.CustomerResponse">
+        select * from customer
+        where code = #{code}
+        limit 1
+    </select>
+
+    <select id="countCustomer" parameterType="com.example.booking.model.request.CustomerRequest"
+            resultType="integer">
+        select count(*) from customer
+        <where>
+            <if test="code !=null and code !=''">
+                code = #{code}
+            </if>
+            <if test="name !=null and name !=''">
+                 and "name" ILIKE CONCAT('%' || #{name} || '%')
+            </if>
+            <if test="address !=null and address !=''">
+                and address ILIKE CONCAT('%' || #{address} || '%')
+            </if>
+            <if test="phone != null and phone != '' ">
+                and phone = #{phone}
+            </if>
+            <if test="vip !=null and vip !=''">
+                and vip = #{vip}
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.example.booking.model.request.CustomerRequest">
+        UPDATE customer
+        SET
+            "name" = #{name},
+            "age" = #{age},
+            "address" = #{address},
+            "phone" = #{phone},
+            "email" = #{email}
+        WHERE id = #{id}::uuid
+    </update>
+
+    <delete id="delete" parameterType="com.example.booking.model.request.CustomerRequest">
+        DELETE FROM customer
+        WHERE id = #{id}::uuid
+    </delete>
+
+    <select id="checkInfo" parameterType="com.example.booking.model.request.BookingInfoRequest"
+            resultType="com.example.booking.model.response.CustomerResponse">
+        select * from customer
+        where code = #{code}
+        limit 1
+    </select>
+</mapper>
