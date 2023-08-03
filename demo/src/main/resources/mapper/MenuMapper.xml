@@ -3,61 +3,85 @@
 <mapper namespace="com.example.booking.mapper.MenuMapper">
 
 	<insert id="create" parameterType="com.example.booking.model.request.MenuRequest">
-		INSERT INTO portal_menu (
-			name,
-			name_en,
+		INSERT INTO menu (
+			"name",
 			parent_id,
-			priority,
 			path,
-			status,
-			icon,
 	   		create_date,
-	   		creater
+	   		creator
    		)
 		VALUES (
 			#{name},
-			#{nameEn},
 			#{parentId},
-			#{priority},
 			#{path},
-			#{status},
-			#{icon},
 			NOW(),
-			#{creater}
+			#{creator}
 		)
 	</insert>
 	
 	<update id="update" parameterType="com.example.booking.model.request.MenuRequest">
-		UPDATE portal_menu
-		SET name=#{name},
-			name_en=#{nameEn},
-			parent_id=#{parentId},
-			priority = #{priority},
-			status = #{status},
-			icon = #{icon},
-			edit_date = NOW(),
-			editer = #{editer}
+		UPDATE menu
+		SET "name"=#{name},
+			path = #{path},
+			parent_id=#{parentId}
 		WHERE id = #{id}::uuid
 	</update>
 	
 	<select id="get" resultType="com.example.booking.model.response.MenuResponse">
-		SELECT * FROM level_menu
+		SELECT *, menu.path as path FROM permission
+		LEFT JOIN menu on permission.menu_id::uuid = menu.id::uuid
 		<where>
 			<if test="name != null and name != '' ">
-		    	AND name ILIKE CONCAT('%' || #{name} ||'%')
+		    	AND permission.name ILIKE CONCAT('%' || #{name} ||'%')
 	        </if>
 	        <if test="roleCode != null and roleCode != ''">
-	          	AND role_code = #{roleCode}
-	        </if>        
+	          	AND permission.role_code = #{roleCode}
+	        </if>
 		</where>
 	</select>
 
-	<select id="getAll" resultType="com.example.booking.model.response.MenuResponse">
+	<select id="getForCategory" resultType="com.example.booking.model.response.MenuResponse"
+			parameterType="com.example.booking.model.request.PermissionRequest">
 		SELECT * FROM menu
+		where id = #{menuId}::uuid
 	</select>
-	
-	<select id="findAllMenu" resultType="com.example.booking.model.response.MenuResponse">
-		SELECT * FROM menu ORDER BY create_date  DESC
+
+	<select id="getParentMenu" resultType="com.example.booking.model.response.MenuResponse">
+		SELECT * FROM menu
+		where parent_id is null
+	</select>
+
+	<select id="findAllMenu" resultType="com.example.booking.model.response.MenuResponse"
+		parameterType="com.example.booking.model.request.MenuRequest">
+		SELECT * FROM menu
+		<where>
+			<if test="name != null and name != '' ">
+				AND menu.name ILIKE CONCAT('%' || #{name} ||'%')
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND menu.parent_id = #{parentId}::uuid
+			</if>
+		</where>
+
+
+		ORDER BY create_date DESC
+
+		<if test="limit > 0">
+			OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+		</if>
+	</select>
+
+	<select id="countMenu" resultType="integer"
+			parameterType="com.example.booking.model.request.MenuRequest">
+		SELECT count(*) FROM menu
+		<where>
+			<if test="name != null and name != '' ">
+				AND name ILIKE CONCAT('%' || #{name} ||'%')
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND parent_id = #{parentId}::uuid
+			</if>
+		</where>
 	</select>
 	
 	<select id="findAllMenuChild" resultType="com.example.booking.model.response.MenuResponse">

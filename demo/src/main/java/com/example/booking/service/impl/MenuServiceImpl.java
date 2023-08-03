@@ -1,5 +1,6 @@
 package com.example.booking.service.impl;
 
+import com.example.booking.model.request.PermissionRequest;
 import com.example.booking.service.IMenuService;
 import com.example.booking.mapper.MenuMapper;
 import com.example.booking.model.request.MenuRequest;
@@ -22,30 +23,20 @@ public class MenuServiceImpl implements IMenuService {
 	private MenuMapper mapper;
 
 	@Override
-	public BaseResponse create(MenuRequest request) throws IOException {
+	public BaseResponse create(MenuRequest request) {
 		BaseResponse response = new BaseResponse();
-		if(request == null) {
-			response.setErrorCode("400");
-			response.setErrorDesc("Bad request");
-			return response;
-		}
-		if(request.getName() == null || request.getPath() == null) {
-			response.setErrorCode("400");
-			response.setErrorDesc("Bad request because missing name or path");
-			return response;
-		}
 		try {
 			int created = mapper.create(request);
 			if (created > 0) {
 				response.setErrorCode("0");
-				response.setErrorDesc("Tạo menu thành công");
+				response.setErrorDesc("Create Successfully");
 			} else {
 				response.setErrorCode("1");
-				response.setErrorDesc("Tạo menu thất bại");
+				response.setErrorDesc("Create failure");
 			}
 		} catch (Exception e) {
-			response.setErrorCode("1");
-			response.setErrorDesc("Tạo menu thất bại");
+			response.setErrorCode("-1");
+			response.setErrorDesc("fail");
 		}
 		
 		return response;
@@ -65,41 +56,69 @@ public class MenuServiceImpl implements IMenuService {
 	}
 
 	@Override
+	public BaseResponse getMenuForCategory(List<PermissionRequest> request) throws IOException {
+		try{
+			List<MenuResponse> result = new ArrayList<>();
+
+			for(PermissionRequest item: request){
+				result.add(mapper.getForCategory(item));
+			}
+			if(result.size() > 0){
+				return new BaseResponse(result, "0", "success");
+			}else {
+				return new BaseResponse("1", "fail");
+			}
+
+		}catch (Exception e) {
+			return new BaseResponse("-1", "fail");
+		}
+	}
+
+	@Override
+	public BaseResponse getParentMenu(MenuRequest request) throws IOException {
+		try{
+			List<MenuResponse> result = mapper.getParentMenu(request);
+
+			if(result.size() > 0){
+				return new BaseResponse(result, "0", "get successfully");
+			}else {
+				return new BaseResponse("1", "get failure");
+			}
+		}catch (Exception e){
+			return new BaseResponse("-1", "Fail");
+		}
+
+	}
+
+	@Override
 	public BaseResponse update(MenuRequest request) throws IOException {
 		BaseResponse response = new BaseResponse();
-		if(request == null) {
-			response.setErrorCode("400");
-			response.setErrorDesc("Bad request");
-			return response;
-		}
-		if(request.getName() == null || request.getPath() == null || request.getId() == null) {
-			response.setErrorCode("400");
-			response.setErrorDesc("Bad request because missing name or path");
-			return response;
-		}
-		
 		try {
 			int updated = mapper.update(request);
 			if (updated > 0) {
 				response.setErrorCode("0");
-				response.setErrorDesc("Cập nhật menu thành công");
+				response.setErrorDesc("Update Successfully");
 			} else {
 				response.setErrorCode("1");
-				response.setErrorDesc("Cập nhật menu thất bại");
+				response.setErrorDesc("Update failure");
 			}
 		} catch (Exception e) {
-			response.setErrorCode("1");
-			response.setErrorDesc("Cập nhật menu thất bại");
+			response.setErrorCode("-1");
+			response.setErrorDesc("fail");
 		}
 		return response;
 	}
 
 	@Override
-	public BaseResponse findAllMenu() throws IOException {
-		BaseResponse response = new BaseResponse();
-		response.setErrorCode("0");
-		response.setData(mapper.findAllMenu());
-		return response;
+	public BaseResponse findAllMenu(MenuRequest request) throws IOException {
+		try{
+			List<MenuResponse> result = mapper.findAllMenu(request);
+			int count = mapper.countMenu(request);
+
+			return new BaseResponse(result, count, "0", "success");
+		}catch (Exception e){
+			return new BaseResponse(e);
+		}
 	}
 
 	@Override

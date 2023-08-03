@@ -134,7 +134,7 @@ public class BookingInfoServiceImpl implements IBookingInfoService {
             }
 
             if(result.size() > 0) {
-                baseResponse = new BaseResponse(result, "0", "Statistic Successsfully");
+                baseResponse = new BaseResponse(result, "0", "Statistic Successfully");
             }else {
                 baseResponse = new BaseResponse("1", "Statistic failure");
             }

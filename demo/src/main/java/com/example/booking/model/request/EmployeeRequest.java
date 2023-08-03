@@ -13,6 +13,7 @@ public class EmployeeRequest {
     private int isBusy;
     private String date;
     private String accountId;
+    private String room;
 
 //    create account
     private String password;
@@ -22,6 +23,14 @@ public class EmployeeRequest {
 //    pagination
     private int limit;
     private int page;
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
 
     public String getAccountId() {
         return accountId;

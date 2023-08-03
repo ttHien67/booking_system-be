@@ -1,6 +1,7 @@
 package com.example.booking.mapper;
 
 import com.example.booking.model.request.MenuRequest;
+import com.example.booking.model.request.PermissionRequest;
 import com.example.booking.model.response.MenuResponse;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,15 @@ public interface MenuMapper {
 
 	List<MenuResponse> get(MenuRequest request);
 
-	List<MenuResponse> getAll();
+	MenuResponse getForCategory(PermissionRequest request);
+
+	List<MenuResponse> getParentMenu(MenuRequest request);
 
 	int countByCondition(MenuRequest request);
 	
-	List<MenuResponse> findAllMenu();
+	List<MenuResponse> findAllMenu(MenuRequest request);
+
+	int countMenu(MenuRequest request);
 	
 	List<MenuResponse> findAllMenuChild();
 	

@@ -1,6 +1,7 @@
 package com.example.booking.controller;
 
 import com.example.booking.model.request.MenuRequest;
+import com.example.booking.model.request.PermissionRequest;
 import com.example.booking.model.response.BaseResponse;
 import com.example.booking.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/menu")
@@ -22,13 +24,23 @@ public class MenuController {
 
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> create(@RequestBody MenuRequest request) throws IOException {
+    public ResponseEntity<BaseResponse> create(@RequestBody MenuRequest request) {
         return new ResponseEntity<>(menuService.create(request), HttpStatus.OK);
     }
     
     @PostMapping(value = "/getMenu", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> getMenu(@RequestBody MenuRequest request) throws IOException {
         return new ResponseEntity<>(menuService.getMenu(request), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/getMenuForCategory", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> getMenuForCategory(@RequestBody List<PermissionRequest> request) throws IOException {
+        return new ResponseEntity<>(menuService.getMenuForCategory(request), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/getParentMenu", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> getParentMenu(@RequestBody MenuRequest request) throws IOException {
+        return new ResponseEntity<>(menuService.getParentMenu(request), HttpStatus.OK);
     }
     
     @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,8 +49,8 @@ public class MenuController {
     }
     
     @PostMapping(value = "/findAllMenu", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> findAllMenu() throws IOException {
-        return new ResponseEntity<>(menuService.findAllMenu(), HttpStatus.OK);
+    public ResponseEntity<BaseResponse> findAllMenu(@RequestBody MenuRequest request) throws IOException {
+        return new ResponseEntity<>(menuService.findAllMenu(request), HttpStatus.OK);
     }
     
     @PostMapping(value = "/findAllMenuChild", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

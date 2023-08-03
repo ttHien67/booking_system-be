@@ -26,18 +26,18 @@ public class ProductController {
         return new ResponseEntity<>(productService.getProduct(request), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/updateEmployee", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateEmployee(@RequestBody ProductRequest request){
-        return new ResponseEntity<>(productService.updateEmployee(request), HttpStatus.OK);
+    @PostMapping(value = "/updateProduct", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> updateProduct(@RequestBody ProductRequest request){
+        return new ResponseEntity<>(productService.updateProduct(request), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/deleteEmployee", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> deleteEmployee(@RequestBody ProductRequest request){
-        return new ResponseEntity<>(productService.deleteEmployee(request), HttpStatus.OK);
+    @PostMapping(value = "/deleteProduct", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> deleteProduct(@RequestBody ProductRequest request){
+        return new ResponseEntity<>(productService.deleteProduct(request), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/createEmployee", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> createEmployee(@RequestBody ProductRequest request){
-        return new ResponseEntity<>(productService.createEmployee(request), HttpStatus.OK);
+    @PostMapping(value = "/createProduct", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> createProduct(@RequestBody ProductRequest request){
+        return new ResponseEntity<>(productService.createProduct(request), HttpStatus.OK);
     }
 }

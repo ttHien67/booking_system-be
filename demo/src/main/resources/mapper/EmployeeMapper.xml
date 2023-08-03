@@ -10,6 +10,7 @@
             phone,
             email,
             "address",
+            room,
             role,
             max_customer,
             account_id,
@@ -21,6 +22,7 @@
             #{phone},
             #{email},
             #{address},
+            #{room},
             #{role},
             #{maxCustomer},
             #{accountId},
@@ -30,19 +32,21 @@
 
     <select id="get" resultType="com.example.booking.model.response.EmployeeResponse"
             parameterType="com.example.booking.model.request.EmployeeRequest">
-        select * from employee
+        select *, product.name as roleName
+        from employee
+        left join product ON employee.role = product.code
         <where>
             <if test="code !=null and code !=''">
-                code = #{code}
+                employee.code = #{code}
             </if>
             <if test="name !=null and name !=''">
-                and "name" ILIKE CONCAT('%' || #{name} || '%')
-            </if>
-            <if test="address !=null and address !=''">
-                and address ILIKE CONCAT('%' || #{address} || '%')
+                and employee.name ILIKE CONCAT('%' || #{name} || '%')
             </if>
             <if test="phone !=null and phone !=''">
                 and phone = #{phone}
+            </if>
+            <if test="room !=null and room !=''">
+                and room = #{room}
             </if>
             <if test="role !=null and role !=''">
                 and role ILIKE CONCAT('%' || #{role} || '%')
@@ -52,7 +56,7 @@
             </if>
         </where>
 
-        order by create_date desc
+        order by employee.create_date desc
 
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
@@ -68,19 +72,22 @@
         select count(*) from employee
         <where>
             <if test="code !=null and code !=''">
-                code = #{code}
+                employee.code = #{code}
             </if>
             <if test="name !=null and name !=''">
-                 and "name" ILIKE CONCAT('%' || #{name} || '%')
+                and employee.name ILIKE CONCAT('%' || #{name} || '%')
             </if>
-            <if test="address !=null and address !=''">
-                and address ILIKE CONCAT('%' || #{address} || '%')
-            </if>
-            <if test="phone != null and phone != '' ">
+            <if test="phone !=null and phone !=''">
                 and phone = #{phone}
+            </if>
+            <if test="room !=null and room !=''">
+                and room = #{room}
             </if>
             <if test="role !=null and role !=''">
                 and role ILIKE CONCAT('%' || #{role} || '%')
+            </if>
+            <if test="accountId !=null and accountId !=''">
+                and account_id = #{accountId}::uuid
             </if>
         </where>
     </select>
@@ -92,11 +99,10 @@
             "age" = #{age},
             "address" = #{address},
             "phone" = #{phone},
+            room = #{room},
             "email" = #{email},
             role = #{role},
-            max_customer = #{maxCustomer},
-            count_service = #{countService},
-            isFree = #{isFree}
+            max_customer = #{maxCustomer}
         WHERE id = #{id}::uuid
     </update>
 

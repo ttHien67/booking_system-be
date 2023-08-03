@@ -20,11 +20,30 @@ public class EmployeeResponse extends BaseDTO {
     private Date editDate;
     private int sumService;
     private String accountId;
+    private String roleName;
+    private String room;
+
 
     //    create account
     private String password;
     private String roleCode;
     private String userName;
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 
     public String getAccountId() {
         return accountId;

@@ -27,7 +27,7 @@ public class ProductServiceImpl implements IProductService {
         try{
             List<ProductResponse> list = mapper.get(request);
             if(list.size() > 0){
-                return new BaseResponse("0", "successfully");
+                return new BaseResponse(list,"0", "successfully");
             }else {
                 return new BaseResponse("1", "fail");
             }

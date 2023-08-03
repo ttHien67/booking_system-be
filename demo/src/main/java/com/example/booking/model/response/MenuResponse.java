@@ -7,22 +7,20 @@ public class MenuResponse {
 	
 	private String id;
 	private String name;
-	private String nameEn;
 	private String parentId;
 	private String path;
-	private String icon;
-	private String status;
-	private String creater;
-	private int priority;
-	private Date createDate;
+	private String creator;
+	private String createDate;
 	private List<MenuResponse> menuChilds;
-	
-	public String getIcon() {
-		return icon;
+
+	public String getCreateDate() {
+		return createDate;
 	}
-	public void setIcon(String icon) {
-		this.icon = icon;
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
+
 	public String getId() {
 		return id;
 	}
@@ -34,12 +32,6 @@ public class MenuResponse {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getNameEn() {
-		return nameEn;
-	}
-	public void setNameEn(String nameEn) {
-		this.nameEn = nameEn;
 	}
 	public String getParentId() {
 		return parentId;
@@ -53,35 +45,18 @@ public class MenuResponse {
 	public void setPath(String path) {
 		this.path = path;
 	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public int getPriority() {
-		return priority;
-	}
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
-	public String getCreater() {
-		return creater;
-	}
-	public void setCreater(String creater) {
-		this.creater = creater;
-	}
-	public Date getCreateDate() {
-		return createDate;
-	}
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
 	public List<MenuResponse> getMenuChilds() {
 		return menuChilds;
 	}
 	public void setMenuChilds(List<MenuResponse> menuChilds) {
 		this.menuChilds = menuChilds;
 	}
-	
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
 }

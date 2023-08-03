@@ -8,6 +8,8 @@ public interface IEmployeeService {
 
     public BaseResponse getEmployee(EmployeeRequest request);
 
+    public BaseResponse getAllEmployee(EmployeeRequest request);
+
     public BaseResponse updateEmployee(EmployeeRequest request);
 
     public BaseResponse deleteEmployee(EmployeeRequest request);

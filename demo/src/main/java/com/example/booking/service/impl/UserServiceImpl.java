@@ -58,7 +58,7 @@ public class UserServiceImpl implements IUserService {
             UserResponse user = mapper.finAccountByUsername(userName);
 
             if(user == null || !BCrypt.checkpw(password, user.getPassword())) {
-                throw new AuthException("Invalid username/password");
+                return null;
             }
             user.setPassword(null);
             return user;

@@ -27,6 +27,15 @@ public class BookingInfoResponse extends BaseDTO {
     private String serviceName;
     private String time;
     private int priority;
+    private String productName;
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
 
     public int getPriority() {
         return priority;

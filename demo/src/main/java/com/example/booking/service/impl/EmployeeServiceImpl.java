@@ -33,7 +33,23 @@ public class EmployeeServiceImpl implements IEmployeeService {
             int count = mapper.countEmployee(request);
 
             if(result.size() >= 0) {
-                baseResponse = new BaseResponse(result, count, "0", "Get Successsfully");
+                baseResponse = new BaseResponse(result, count, "0", "Get Successfully");
+            }
+
+        }catch (Exception e){
+            baseResponse = new BaseResponse("1", "Failed");
+            return baseResponse;
+        }
+        return baseResponse;
+    }
+
+    public BaseResponse getAllEmployee(EmployeeRequest request) {
+        BaseResponse baseResponse = new BaseResponse();
+        try{
+            List<EmployeeResponse> result = mapper.getAll();
+
+            if(result.size() > 0) {
+                baseResponse = new BaseResponse(result, "0", "Get Successfully");
             }
 
         }catch (Exception e){
@@ -49,7 +65,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
             int result = mapper.update(request);
 
             if(result > 0) {
-                baseResponse = new BaseResponse(request, "0", "Update Successsfully");
+                baseResponse = new BaseResponse(request, "0", "Update Successfully");
             }else {
                 baseResponse = new BaseResponse("1", "Update failure");
             }

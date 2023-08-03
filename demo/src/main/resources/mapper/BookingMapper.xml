@@ -28,9 +28,10 @@
 
     <select id="get" resultType="com.example.booking.model.response.BookingInfoResponse"
             parameterType="com.example.booking.model.request.BookingInfoRequest">
-        select *, employee.name as employeeName
+        select *, employee.name as employeeName, product.name as productName
         from booking_info
         left join employee on booking_info.employee_id = employee.id
+        left join product on booking_info.product_type = product.code
         <where>
             <if test="name !=null and name !=''">
                 and booking_info.name ILIKE CONCAT('%' || #{name} || '%')
@@ -46,7 +47,7 @@
             </if>
         </where>
 
-        order by booking_info.create_date desc
+        order by booking_info.create_date desc, priority desc
 
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY

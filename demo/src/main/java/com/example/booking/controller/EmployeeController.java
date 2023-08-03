@@ -25,6 +25,11 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.getEmployee(request), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/getAllEmployee", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> getAllEmployee(@RequestBody EmployeeRequest request){
+        return new ResponseEntity<>(employeeService.getAllEmployee(request), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/updateEmployee", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateEmployee(@RequestBody EmployeeRequest request){
         return new ResponseEntity<>(employeeService.updateEmployee(request), HttpStatus.OK);

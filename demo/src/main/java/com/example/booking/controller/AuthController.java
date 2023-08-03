@@ -32,13 +32,15 @@ public class AuthController {
         String password = (String) user.get("password");
 
         if(userName == null || password == null) {
-//            throw new AuthException("Invalid user/password");
+            throw new AuthException("Invalid user/password");
         }
 
         UserResponse response = userService.validateUser(userName, password);
 
         if(response == null) {
-            throw new AuthException("Invalid user/password");
+            Map<String, Object> map = new HashMap<>();;
+            map.put("response", response);
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST );
         }
 
         return new ResponseEntity<>(generateJWTToken(response), HttpStatus.OK);

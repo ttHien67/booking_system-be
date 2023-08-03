@@ -7,17 +7,41 @@ public class MenuRequest{
 	
 	private String id;
 	private String name;
-	private String nameEn;
 	private String parentId;
 	private String path;
-	private String icon;
-	private String status;
-	private int priority;
-	private Date createdDate;
-	private String editer;
-	private String creater;
+	private String createDate;
+	private String creator;
+
+
+	//    pagination
+	private int limit;
+	private int page;
 
 	private String roleCode;
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
+	public int getLimit() {
+		return limit;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
 
 	public String getRoleCode() {
 		return roleCode;
@@ -27,12 +51,6 @@ public class MenuRequest{
 		this.roleCode = roleCode;
 	}
 
-	public String getIcon() {
-		return icon;
-	}
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
 	public String getId() {
 		return id;
 	}
@@ -44,18 +62,6 @@ public class MenuRequest{
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-	public String getNameEn() {
-		return nameEn;
-	}
-	public void setNameEn(String nameEn) {
-		this.nameEn = nameEn;
 	}
 	public String getParentId() {
 		return parentId;
@@ -69,29 +75,12 @@ public class MenuRequest{
 	public void setPath(String path) {
 		this.path = path;
 	}
-	public String getStatus() {
-		return status;
+
+	public String getCreator() {
+		return creator;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+
+	public void setCreator(String creator) {
+		this.creator = creator;
 	}
-	public int getPriority() {
-		return priority;
-	}
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
-	public String getEditer() {
-		return editer;
-	}
-	public void setEditer(String editer) {
-		this.editer = editer;
-	}
-	public String getCreater() {
-		return creater;
-	}
-	public void setCreater(String creater) {
-		this.creater = creater;
-	}
-	
 }
