@@ -28,11 +28,6 @@ public class KafkaJsonProducer {
 
         LOGGER.info(String.format("Message sent %s", request.toString()));
 
-//        Message<NotificationRequest> data = MessageBuilder
-//                .withPayload(request)
-//                .setHeader(KafkaHeaders.TOPIC, topicJsonName)
-//                .build();
-
         kafkaTemplate.send(topicJsonName, request);
     }
 

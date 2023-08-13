@@ -25,9 +25,6 @@ import java.util.List;
 public class NotificationController {
 
     @Autowired
-    private KafkaProducer kafkaProducer;
-
-    @Autowired
     private KafkaJsonProducer kafkaJsonProducer;
 
     @PostMapping(value = "/sendNotification")
@@ -37,13 +34,5 @@ public class NotificationController {
         kafkaJsonProducer.sendJson(message);
         return ResponseEntity.ok("Message sent to topic");
     }
-
-////    @Scheduled(fixedDelay = 3000)
-//    @KafkaListener(topics = "booking", groupId = "groupId")
-////    @PostMapping(value = "/responseNotification")
-//    public String response(String request){
-//        System.out.print(request);
-//        return request;
-//    }
 
 }
